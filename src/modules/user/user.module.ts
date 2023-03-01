@@ -5,6 +5,7 @@ import { ExceptionsModule } from '../../common/core/exception/exceptions.module'
 import { ExceptionsService } from '../../common/core/exception/exceptions.service';
 import { LoggerModule } from '../../common/core/logger/logger.module';
 import { LoggerService } from '../../common/core/logger/logger.service';
+import { UseCaseProxy } from '../../common/utils/usecase-proxy';
 import { BcryptModule } from '../../services/bcrypt/bcrypt.module';
 import { BcryptService } from '../../services/bcrypt/bcrypt.service';
 import { JwtServiceModule } from '../../services/jwt/jwt.module';
@@ -13,7 +14,6 @@ import { CacheConfigModule } from '../../services/redis/cache.module';
 import { CacheService } from '../../services/redis/cache.service';
 import { S3ConfigModule } from '../../services/s3/s3.module';
 import { S3Service } from '../../services/s3/s3.service';
-import { UseCaseProxy } from '../../utils/usecase-proxy';
 import { FileRepository } from '../file/file.repository';
 import { RepositoriesModule } from '../repositories.proxy.module';
 import {
@@ -30,8 +30,8 @@ import { UserRepository } from './user.repository';
 @Module({
   imports: [
     LoggerModule,
-    RepositoriesModule,
     EnvironmentConfigModule,
+    RepositoriesModule,
     BcryptModule,
     ExceptionsModule,
     CacheConfigModule,

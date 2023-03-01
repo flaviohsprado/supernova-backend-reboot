@@ -7,18 +7,18 @@ export const getTypeOrmModuleOptions = (
   config: EnvironmentConfigService,
 ): TypeOrmModuleOptions =>
   ({
-    type: config.getDatabaseType(),
+    type: 'postgres',
     host: config.getDatabaseHost(),
     port: config.getDatabasePort(),
     username: config.getDatabaseUser(),
     password: config.getDatabasePassword(),
     database: config.getDatabaseName(),
     entities: ['dist/**/*.entity{.ts,.js}'],
-    synchronize: true, //config.getDatabaseSync(),
+    synchronize: config.getDatabaseSync(),
     ssl: config.getEnvironment() === 'production',
     //logging: config.getEnvironment() === 'development',
     extra:
-      process.env.ENVIRONMENT === 'production'
+      config.getEnvironment() === 'production'
         ? {
             ssl: {
               rejectUnauthorized: false,

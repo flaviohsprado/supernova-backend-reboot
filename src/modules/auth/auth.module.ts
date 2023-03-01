@@ -1,9 +1,10 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { EnvironmentConfigModule } from 'src/common/core/environment-config/environment-config.module';
-import { ExceptionsModule } from 'src/common/core/exception/exceptions.module';
-import { ExceptionsService } from 'src/common/core/exception/exceptions.service';
-import { LoggerModule } from 'src/common/core/logger/logger.module';
-import { LoggerService } from 'src/common/core/logger/logger.service';
+import { EnvironmentConfigModule } from '../../common/core/environment-config/environment-config.module';
+import { ExceptionsModule } from '../../common/core/exception/exceptions.module';
+import { ExceptionsService } from '../../common/core/exception/exceptions.service';
+import { LoggerModule } from '../../common/core/logger/logger.module';
+import { LoggerService } from '../../common/core/logger/logger.service';
+import { UseCaseProxy } from '../../common/utils/usecase-proxy';
 import { BcryptModule } from '../../services/bcrypt/bcrypt.module';
 import { BcryptService } from '../../services/bcrypt/bcrypt.service';
 import { JwtServiceModule } from '../../services/jwt/jwt.module';
@@ -45,12 +46,14 @@ export class AuthModule {
             exceptionService: ExceptionsService,
             userRepository: UserRepository,
           ) =>
-            new LoginUseCase(
-              logger,
-              jwtService,
-              bcryptService,
-              exceptionService,
-              userRepository,
+            new UseCaseProxy(
+              new LoginUseCase(
+                logger,
+                jwtService,
+                bcryptService,
+                exceptionService,
+                userRepository,
+              ),
             ),
         },
       ],

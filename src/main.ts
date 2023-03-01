@@ -7,9 +7,9 @@ import { SetupGlobalInterceptors } from './common/utils/setupGlobalInterceptors.
 import { SetupGlobalPipes } from './common/utils/setupGlobalPipes.utils';
 
 async function main() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 3009;
 
   SetupGlobalFilters.for(app);
   SetupGlobalInterceptors.for(app);

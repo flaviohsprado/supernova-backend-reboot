@@ -47,8 +47,8 @@ import { JwtServiceModule } from './services/jwt/jwt.module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    JwtStrategy,
     LocalStrategy,
+    JwtStrategy,
   ],
 })
 export class AppModule {}

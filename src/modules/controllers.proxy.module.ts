@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
@@ -12,9 +13,9 @@ import { UserModule } from './user/user.module';
     //MusicModule.register(),
     //PlaylistModule.register(),
   ],
-  providers: [
+  controllers: [
     UserController,
-    //AuthController,
+    AuthController,
     //ArtistController,
     //AlbumController,
     //MusicController,

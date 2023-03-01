@@ -3,9 +3,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthModule } from '../../modules/auth/auth.module';
 import { LoginUseCase } from '../../modules/auth/use-cases/login.usecase';
-import { UseCaseProxy } from '../../utils/usecase-proxy';
 import { ExceptionsService } from '../core/exception/exceptions.service';
 import { LoggerService } from '../core/logger/logger.service';
+import { UseCaseProxy } from '../utils/usecase-proxy';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
