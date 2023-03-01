@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { ArtistController } from './artist/artist.controller';
+import { ArtistModule } from './artist/artist.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { UserController } from './user/user.controller';
@@ -8,7 +10,7 @@ import { UserModule } from './user/user.module';
   imports: [
     UserModule.register(),
     AuthModule.register(),
-    //ArtistModule.register(),
+    ArtistModule.register(),
     //AlbumModule.register(),
     //MusicModule.register(),
     //PlaylistModule.register(),
@@ -16,7 +18,7 @@ import { UserModule } from './user/user.module';
   controllers: [
     UserController,
     AuthController,
-    //ArtistController,
+    ArtistController,
     //AlbumController,
     //MusicController,
     //PlaylistController,
@@ -24,7 +26,7 @@ import { UserModule } from './user/user.module';
   exports: [
     UserModule.register(),
     AuthModule.register(),
-    //ArtistModule.register(),
+    ArtistModule.register(),
     //AlbumModule.register(),
     //MusicModule.register(),
     //PlaylistModule.register(),

@@ -1,4 +1,5 @@
 import { Body, Controller, Inject } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../../common/decorators/isPublicRoute.decorator';
 import { PostApiResponse } from '../../common/decorators/requests/postApiResponse.decorator';
 import { UseCaseProxy } from '../../common/utils/usecase-proxy';
@@ -7,6 +8,7 @@ import { AuthDTO } from './dto/auth.dto';
 import { AuthPresenter } from './dto/auth.presenter';
 import { LoginUseCase } from './use-cases/login.usecase';
 
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(
