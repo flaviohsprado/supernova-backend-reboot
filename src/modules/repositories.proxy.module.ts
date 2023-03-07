@@ -11,16 +11,27 @@ import { Music } from './music/entities/music.entity';
 import { MusicRepository } from './music/music.repository';
 import { Playlist } from './playlist/entities/playlist.entity';
 import { PlaylistRepository } from './playlist/playlist.repository';
+import { Role } from './role/entities/role.entity';
+import { RoleRepository } from './role/role.repository';
 import { User } from './user/entities/user.entity';
 import { UserRepository } from './user/user.repository';
 
 @Module({
   imports: [
     TypeOrmConfigModule,
-    TypeOrmModule.forFeature([User, Artist, Album, File, Music, Playlist]),
+    TypeOrmModule.forFeature([
+      User,
+      Role,
+      Artist,
+      Album,
+      File,
+      Music,
+      Playlist,
+    ]),
   ],
   providers: [
     UserRepository,
+    RoleRepository,
     ArtistRepository,
     AlbumRepository,
     FileRepository,
@@ -29,6 +40,7 @@ import { UserRepository } from './user/user.repository';
   ],
   exports: [
     UserRepository,
+    RoleRepository,
     ArtistRepository,
     AlbumRepository,
     FileRepository,

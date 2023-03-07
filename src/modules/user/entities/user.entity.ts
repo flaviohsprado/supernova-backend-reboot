@@ -2,6 +2,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -9,6 +10,7 @@ import {
 import { IsOptionalStringColumn } from '../../../common/decorators/columns/isOptionalStringColumn.decorator';
 import { IsRequiredStringColumn } from '../../../common/decorators/columns/isRequiredStringColumn.decorator';
 import { File } from '../../file/entities/file.entity';
+import { Role } from '../../role/entities/role.entity';
 
 @Entity()
 export class User {
@@ -37,4 +39,11 @@ export class User {
   })
   @JoinColumn()
   public file?: File;
+
+  @ManyToOne(() => Role, (Role) => Role.id)
+  @JoinColumn({ name: 'roleId' })
+  public role?: Role;
+
+  @IsOptionalStringColumn()
+  public roleId?: string;
 }
