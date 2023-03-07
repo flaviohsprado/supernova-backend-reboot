@@ -3,12 +3,15 @@ import { ArtistController } from './artist/artist.controller';
 import { ArtistModule } from './artist/artist.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { RoleController } from './role/role.controller';
+import { RoleModule } from './role/role.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     UserModule.register(),
+    RoleModule.register(),
     AuthModule.register(),
     ArtistModule.register(),
     //AlbumModule.register(),
@@ -17,6 +20,7 @@ import { UserModule } from './user/user.module';
   ],
   controllers: [
     UserController,
+    RoleController,
     AuthController,
     ArtistController,
     //AlbumController,
@@ -25,6 +29,7 @@ import { UserModule } from './user/user.module';
   ],
   exports: [
     UserModule.register(),
+    RoleModule.register(),
     AuthModule.register(),
     ArtistModule.register(),
     //AlbumModule.register(),
