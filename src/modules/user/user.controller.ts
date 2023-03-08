@@ -53,7 +53,7 @@ export class UserController {
   @GetApiResponse(UserPresenter)
   public async findAll(): Promise<UserPresenter[]> {
     const users = await this.findAllUserUseCase.getInstance().execute();
-    return users.map((user) => new UserPresenter(user));
+    return users.map((user) => (user = new UserPresenter({ ...user })));
   }
 
   @GetApiResponse(UserPresenter, ':id')
@@ -83,6 +83,15 @@ export class UserController {
       .execute(id, user);
 
     return new UserPresenter(updatedUser);
+  }
+
+  @PutApiResponse(UserPresenter, '/:id/avatar')
+  public async updateUserFile(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UserPresenter> {
+    const newFile: CreateFileDTO = await FileUtils.createFile(file);
+    return await this.updateUserFileUseCase.getInstance().execute(id, newFile);
   }
 
   @HttpCode(204)

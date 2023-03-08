@@ -1,10 +1,6 @@
-export interface IJwtServicePayload {
-  id: string;
-  username: string;
-  avatar?: string;
-}
+import { IJwtAuthPayload } from '../authJwtPayload.interface';
 
 export interface IJwtService {
-  checkToken(token: string): Promise<any>;
-  createToken(payload: IJwtServicePayload): string;
+  checkToken<T>(token: string): Promise<T>;
+  createToken(payload: IJwtAuthPayload): string;
 }

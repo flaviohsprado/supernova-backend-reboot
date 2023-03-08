@@ -15,20 +15,20 @@ export class UserRepository implements IUserRepository {
   public async findByKey(key: string, value: string): Promise<User> {
     return await this.userEntityRepository.findOne({
       where: { [key]: value },
-      relations: ['file'],
+      relations: ['file', 'role'],
     });
   }
 
   public async findAll(): Promise<User[]> {
     return this.userEntityRepository.find({
-      relations: ['file'],
+      relations: ['file', 'role'],
     });
   }
 
   public async findOne(id: string): Promise<User> {
     return await this.userEntityRepository.findOne({
       where: { id },
-      relations: ['file'],
+      relations: ['file', 'role'],
     });
   }
 
