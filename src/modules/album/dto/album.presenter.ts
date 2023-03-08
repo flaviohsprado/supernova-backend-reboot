@@ -27,8 +27,6 @@ export class AlbumPresenter {
   constructor(album: Album) {
     Object.assign(this, album);
 
-    console.log('album', album);
-
     this.releaseDate = new Date(this.releaseDate);
   }
 }

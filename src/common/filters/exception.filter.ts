@@ -29,8 +29,6 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         ? 'Sorry we are experiencing technical problems.'
         : exception.response?.message || '';
 
-    console.log('exception', exception);
-
     const error =
       status === HttpStatus.INTERNAL_SERVER_ERROR
         ? 'Sorry we are experiencing technical problems.'
