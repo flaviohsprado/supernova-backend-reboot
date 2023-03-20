@@ -26,10 +26,10 @@ export class User {
   @IsRequiredStringColumn()
   public password?: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   public createdAt?: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   public updatedAt?: Date;
 
   @OneToOne(() => File, (file) => file.ownerId, {

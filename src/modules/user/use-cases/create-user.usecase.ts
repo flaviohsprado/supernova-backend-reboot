@@ -38,9 +38,7 @@ export class CreateUserUseCase {
 
     user.password = await this.bcryptService.createHash(user.password);
 
-    const createdUser: UserPresenter = new UserPresenter(
-      await this.repository.create(user),
-    );
+    const createdUser: UserPresenter = await this.repository.create(user);
 
     createdUser.accessToken = this.jwtService.createToken({
       id: createdUser.id,
@@ -48,12 +46,14 @@ export class CreateUserUseCase {
       avatar: file ? createdUser.file.url : null,
     });
 
+    const userPresenter: UserPresenter = new UserPresenter(createdUser);
+
     this.logger.log(
       'CreateUserUseCases execute()',
       'New user have been inserted',
     );
 
-    return createdUser;
+    return userPresenter;
   }
 
   private async createFile(
