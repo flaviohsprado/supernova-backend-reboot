@@ -5,7 +5,7 @@ import { IUploadService } from '../../../interfaces/abstracts/upload.interface';
 import { IFileRepository } from '../../../interfaces/repositories/file.repository';
 import { IUserRepository } from '../../../interfaces/repositories/user.repository';
 import { CreateFileDTO } from '../../../modules/file/dto/file.dto';
-import { User } from '../entities/user.entity';
+import { UserPresenter } from '../dto/user.presenter';
 
 export class UpdateUserFileUseCase {
   constructor(
@@ -16,7 +16,10 @@ export class UpdateUserFileUseCase {
     private readonly environmentConfig: EnvironmentConfigService,
   ) {}
 
-  public async execute(id: string, file?: CreateFileDTO): Promise<User> {
+  public async execute(
+    id: string,
+    file?: CreateFileDTO,
+  ): Promise<UserPresenter> {
     let fileUploaded: CreateFileDTO = file;
 
     const user = await this.repository.findOne(id);
@@ -43,6 +46,8 @@ export class UpdateUserFileUseCase {
       `File ${fileUploaded.originalname} have been updated`,
     );
 
-    return updatedUser;
+    const userPresenter: UserPresenter = new UserPresenter(updatedUser);
+
+    return userPresenter;
   }
 }

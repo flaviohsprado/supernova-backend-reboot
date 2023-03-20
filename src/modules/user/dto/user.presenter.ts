@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { format } from 'date-fns';
 import { File } from '../../file/entities/file.entity';
-import { User } from '../entities/user.entity';
+import { Role } from '../../role/entities/role.entity';
 
 export class UserPresenter {
   @ApiProperty()
@@ -19,12 +20,22 @@ export class UserPresenter {
   public file?: File;
 
   @ApiProperty()
-  public createdAt?: Date;
+  public role?: Role;
 
   @ApiProperty()
-  public updatedAt?: Date;
+  public createdAt?: Date | string;
 
-  constructor(user: User) {
-    Object.assign(this, user);
+  @ApiProperty()
+  public updatedAt?: Date | string;
+
+  constructor(user?: UserPresenter) {
+    this.id = user?.id;
+    this.username = user?.username;
+    this.email = user?.email;
+    this.accessToken = user?.accessToken;
+    this.file = user?.file;
+    this.role = user?.role;
+    this.createdAt = format(new Date(user?.createdAt), 'dd/MM/yyyy HH:mm:ss');
+    this.updatedAt = format(new Date(user?.updatedAt), 'dd/MM/yyyy HH:mm:ss');
   }
 }

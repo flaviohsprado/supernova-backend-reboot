@@ -6,7 +6,6 @@ import { SetupDocumentBuilder } from './common/utils/setupDocumentBuilder.utils'
 import { SetupGlobalFilters } from './common/utils/setupGlobalFilters.utils';
 import { SetupGlobalInterceptors } from './common/utils/setupGlobalInterceptors.utils';
 import { SetupGlobalPipes } from './common/utils/setupGlobalPipes.utils';
-import { AppClusterService } from './services/cluster/cluster.service';
 
 async function main() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -23,4 +22,5 @@ async function main() {
   await app.listen(port);
 }
 
-AppClusterService.clusterize(main);
+main();
+//AppClusterService.clusterize(main);
