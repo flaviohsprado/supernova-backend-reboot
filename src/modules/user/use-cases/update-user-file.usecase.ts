@@ -1,5 +1,5 @@
-import { EnvironmentConfigService } from '../../../common/core/environment-config/environment-config.service';
 import { OwnerType } from '../../../enums/ownerType.enum';
+import { IEnvironmentConfigService } from '../../../interfaces/abstracts/environmentConfigService.interface';
 import { ILogger } from '../../../interfaces/abstracts/logger.interface';
 import { IUploadService } from '../../../interfaces/abstracts/upload.interface';
 import { IFileRepository } from '../../../interfaces/repositories/file.repository';
@@ -13,7 +13,7 @@ export class UpdateUserFileUseCase {
     private readonly repository: IUserRepository,
     private readonly fileRepository: IFileRepository,
     private readonly uploadService: IUploadService,
-    private readonly environmentConfig: EnvironmentConfigService,
+    private readonly environmentConfig: IEnvironmentConfigService,
   ) {}
 
   public async execute(

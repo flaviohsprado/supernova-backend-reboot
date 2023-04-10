@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { format } from 'date-fns';
-import { File } from '../../file/entities/file.entity';
+import { FilePresenter } from '../../file//dto/file.presenter';
 import { Role } from '../../role/entities/role.entity';
 
 export class UserPresenter {
@@ -17,7 +17,7 @@ export class UserPresenter {
   public accessToken?: string;
 
   @ApiProperty()
-  public file?: File;
+  public file?: FilePresenter;
 
   @ApiProperty()
   public role?: Role;

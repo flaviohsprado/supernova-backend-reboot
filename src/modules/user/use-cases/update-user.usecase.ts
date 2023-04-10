@@ -18,11 +18,14 @@ export class UpdateUserUseCase {
     id: string,
     user: UpdateUserDTO,
   ): Promise<UserPresenter> {
-    if (await this.repository.alreadyExists('email', user.email, id))
+    if (await this.repository.alreadyExists('email', user.email, id)) {
       this.exceptionService.throwForbiddenException({
         message: 'Email already exists in app!',
         statusCode: HttpStatus.FORBIDDEN,
       });
+
+      return;
+    }
 
     if (user.password) {
       user.password = await this.bcryptService.createHash(user.password);
