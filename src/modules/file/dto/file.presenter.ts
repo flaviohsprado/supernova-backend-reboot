@@ -1,9 +1,26 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class FilePresenter {
-  public fieldname: string;
+  @ApiProperty()
+  public fieldname?: string;
 
-  public originalname: string;
+  @ApiProperty()
+  public originalname?: string;
 
-  public url: string;
+  @ApiProperty()
+  public buffer?: Uint8Array;
+
+  @ApiProperty()
+  public encoding?: string;
+
+  @ApiProperty()
+  public mimetype?: string;
+
+  @ApiProperty()
+  public url?: string;
+
+  @ApiProperty()
+  public key?: string;
 
   constructor(props: FilePresenter) {
     Object.assign(this, props);

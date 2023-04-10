@@ -17,6 +17,8 @@ export class FindAllUserUseCase {
 
     const users = await this.repository.findAll();
 
+    if (!users) return undefined;
+
     const userPresenter: UserPresenter[] = users.map(
       (user) => new UserPresenter(user),
     );

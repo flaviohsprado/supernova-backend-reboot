@@ -28,32 +28,40 @@ export class CreateUserUseCase {
     user: CreateUserDTO,
     file?: CreateFileDTO,
   ): Promise<UserPresenter> {
-    if (await this.repository.alreadyExists('email', user.email))
+    if (await this.repository.alreadyExists('email', user.email)) {
       this.exceptionService.throwForbiddenException({
         message: 'Email already exists in app!',
         statusCode: HttpStatus.FORBIDDEN,
       });
 
-    if (file) user.file = await this.createFile(user.id, file);
+      return;
+    }
 
-    user.password = await this.bcryptService.createHash(user.password);
+    const createdUser = await this.createUser(user);
 
-    const createdUser: UserPresenter = await this.repository.create(user);
-
-    createdUser.accessToken = this.jwtService.createToken({
-      id: createdUser.id,
-      username: createdUser.username,
-      avatar: file ? createdUser.file.url : null,
-    });
-
-    const userPresenter: UserPresenter = new UserPresenter(createdUser);
+    if (file) createdUser.file = await this.createFile(user.id, file);
 
     this.logger.log(
       'CreateUserUseCases execute()',
       'New user have been inserted',
     );
 
-    return userPresenter;
+    return createdUser;
+  }
+
+  private async createUser(user: CreateUserDTO): Promise<UserPresenter> {
+    user.password = await this.bcryptService.createHash(user.password);
+
+    const userCreated = await this.repository.create(user);
+
+    const token: string = await this.jwtService.createToken({
+      id: userCreated.id,
+    });
+
+    return new UserPresenter({
+      ...userCreated,
+      accessToken: token,
+    });
   }
 
   private async createFile(
@@ -66,6 +74,8 @@ export class CreateUserUseCase {
       fileUploaded = await this.uploadService.uploadFile(file);
     }
 
-    return await this.fileRepository.create(fileUploaded, id, OwnerType.USER);
+    await this.fileRepository.create(fileUploaded, id, OwnerType.USER);
+
+    return fileUploaded;
   }
 }

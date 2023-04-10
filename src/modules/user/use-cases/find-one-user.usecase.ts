@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { ICacheManager } from '../../../interfaces/abstracts/cache.interface';
 import { IExceptionService } from '../../../interfaces/abstracts/exceptions.interface';
 import { IUserRepository } from '../../../interfaces/repositories/user.repository';
@@ -11,18 +12,21 @@ export class FindOneUserUseCase {
   ) {}
 
   public async execute(id: string): Promise<UserPresenter> {
-    const cachedUser = await this.cacheManager.getCachedObject<UserPresenter>(
-      'user',
-    );
+    const cachedUser: UserPresenter =
+      await this.cacheManager.getCachedObject<UserPresenter>('user');
 
-    if (cachedUser) return cachedUser;
+    if (cachedUser && cachedUser.id === id) return cachedUser;
 
     const user = await this.repository.findOne(id);
 
-    if (!user)
+    if (!user) {
       this.exceptionService.throwNotFoundException({
         message: 'User not found',
+        statusCode: HttpStatus.NOT_FOUND,
       });
+
+      return;
+    }
 
     const userPresenter: UserPresenter = new UserPresenter(user);
 
