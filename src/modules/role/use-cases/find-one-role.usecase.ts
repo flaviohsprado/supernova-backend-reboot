@@ -17,10 +17,12 @@ export class FindOneRoleUseCase {
 
     const role: Role = await this.repository.findOne(id);
 
-    if (!role)
+    if (!role) {
       this.exceptionService.throwNotFoundException({
         message: 'Role not found',
       });
+      return;
+    }
 
     await this.cacheManager.setObjectInCache('role', role);
 
