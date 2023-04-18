@@ -9,43 +9,44 @@ import { User } from './entities/user.entity';
 export class UserRepository implements IUserRepository {
   constructor(
     @InjectRepository(User)
-    private readonly userEntityRepository: Repository<User>,
+    private readonly repository: Repository<User>,
   ) {}
 
   public async findByKey(key: string, value: string): Promise<User> {
-    return await this.userEntityRepository.findOne({
+    return await this.repository.findOne({
       where: { [key]: value },
-      relations: ['file'],
+      relations: ['file', 'role'],
     });
   }
 
   public async findAll(): Promise<User[]> {
-    return this.userEntityRepository.find({
-      relations: ['file'],
+    return await this.repository.find({
+      relations: ['file', 'role'],
     });
   }
 
   public async findOne(id: string): Promise<User> {
-    return await this.userEntityRepository.findOne({
+    return await this.repository.findOne({
       where: { id },
-      relations: ['file'],
+      relations: ['file', 'role'],
     });
   }
 
   public async create(user: CreateUserDTO): Promise<User> {
-    const newUser = this.userEntityRepository.create(user);
-    return this.userEntityRepository.save(newUser);
+    const newUser = await this.repository.create(user);
+    return this.repository.save(newUser);
   }
 
   public async update(id: string, user: User): Promise<User> {
-    return this.userEntityRepository.save({ ...user, id });
+    await this.repository.save({ ...user, id });
+    return await this.repository.findOne({ where: { id } });
   }
 
   public async delete(id: string): Promise<any> {
-    const user = await this.userEntityRepository.findOne({ where: { id } });
+    const user = await this.repository.findOne({ where: { id } });
 
     if (user) {
-      this.userEntityRepository.delete(id);
+      await this.repository.delete(id);
       return user;
     }
   }
@@ -57,7 +58,7 @@ export class UserRepository implements IUserRepository {
   ): Promise<boolean> {
     if (!value) return false;
 
-    const alreadyExists: User = await this.userEntityRepository.findOne({
+    const alreadyExists: User = await this.repository.findOne({
       where: { [key]: value },
     });
 

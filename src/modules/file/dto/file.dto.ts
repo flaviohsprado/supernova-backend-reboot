@@ -29,6 +29,14 @@ export class CreateFileDTO {
   buffer?: Uint8Array;
 
   constructor(props: CreateFileDTO) {
-    Object.assign(this, props);
+    this.ownerId = props.ownerId;
+    this.ownerType = props.ownerType;
+    this.fieldname = props.fieldname;
+    this.originalname = props.originalname;
+    this.encoding = props.encoding;
+    this.mimetype = props.mimetype;
+    this.key = props.key;
+    this.url = props.url;
+    this.buffer = props.buffer;
   }
 }

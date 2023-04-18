@@ -35,6 +35,8 @@ import { JwtServiceModule } from './services/jwt/jwt.module';
     RepositoriesModule,
   ],
   providers: [
+    LocalStrategy,
+    JwtStrategy,
     {
       provide: 'APP_INTERCEPTOR',
       useClass: ClassSerializerInterceptor,
@@ -47,8 +49,6 @@ import { JwtServiceModule } from './services/jwt/jwt.module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    LocalStrategy,
-    JwtStrategy,
   ],
 })
 export class AppModule {}

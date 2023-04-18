@@ -52,14 +52,12 @@ export class UserController {
 
   @GetApiResponse(UserPresenter)
   public async findAll(): Promise<UserPresenter[]> {
-    const users = await this.findAllUserUseCase.getInstance().execute();
-    return users.map((user) => new UserPresenter(user));
+    return await this.findAllUserUseCase.getInstance().execute();
   }
 
   @GetApiResponse(UserPresenter, ':id')
   public async findOne(@Param('id') id: string): Promise<UserPresenter> {
-    const user = await this.findOneUserUseCase.getInstance().execute(id);
-    return new UserPresenter(user);
+    return await this.findOneUserUseCase.getInstance().execute(id);
   }
 
   @Public()
@@ -78,11 +76,16 @@ export class UserController {
     @Param('id') id: string,
     @Body() user: UpdateUserDTO,
   ): Promise<UserPresenter> {
-    const updatedUser = await this.updateUserUseCase
-      .getInstance()
-      .execute(id, user);
+    return await this.updateUserUseCase.getInstance().execute(id, user);
+  }
 
-    return new UserPresenter(updatedUser);
+  @PutApiResponse(UserPresenter, '/:id/avatar')
+  public async updateUserFile(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UserPresenter> {
+    const newFile: CreateFileDTO = await FileUtils.createFile(file);
+    return await this.updateUserFileUseCase.getInstance().execute(id, newFile);
   }
 
   @HttpCode(204)

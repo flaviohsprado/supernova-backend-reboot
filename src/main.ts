@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { SetupCompression } from './common/utils/setupCompression.utils';
 import { SetupContainer } from './common/utils/setupContainer.utils';
 import { SetupDocumentBuilder } from './common/utils/setupDocumentBuilder.utils';
 import { SetupGlobalFilters } from './common/utils/setupGlobalFilters.utils';
@@ -16,8 +17,10 @@ async function main() {
   SetupGlobalPipes.for(app);
   SetupDocumentBuilder.for(app);
   SetupContainer.for(app, AppModule);
+  SetupCompression.for(app);
 
   await app.listen(port);
 }
 
 main();
+//AppClusterService.clusterize(main);

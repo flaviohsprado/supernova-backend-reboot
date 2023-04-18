@@ -1,7 +1,7 @@
-import { IsRequiredString } from '../../../common/decorators/validators/isRequiredString.decorator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class AuthPresenter {
-  @IsRequiredString()
+  @ApiProperty()
   public accessToken: string;
 
   constructor(auth: AuthPresenter) {

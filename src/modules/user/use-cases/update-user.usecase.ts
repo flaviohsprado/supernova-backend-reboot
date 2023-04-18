@@ -4,7 +4,7 @@ import { IExceptionService } from '../../../interfaces/abstracts/exceptions.inte
 import { ILogger } from '../../../interfaces/abstracts/logger.interface';
 import { IUserRepository } from '../../../interfaces/repositories/user.repository';
 import { UpdateUserDTO } from '../dto/user.dto';
-import { User } from '../entities/user.entity';
+import { UserPresenter } from '../dto/user.presenter';
 
 export class UpdateUserUseCase {
   constructor(
@@ -14,12 +14,18 @@ export class UpdateUserUseCase {
     private readonly exceptionService: IExceptionService,
   ) {}
 
-  public async execute(id: string, user: UpdateUserDTO): Promise<User> {
-    if (await this.repository.alreadyExists('email', user.email, id))
+  public async execute(
+    id: string,
+    user: UpdateUserDTO,
+  ): Promise<UserPresenter> {
+    if (await this.repository.alreadyExists('email', user.email, id)) {
       this.exceptionService.throwForbiddenException({
         message: 'Email already exists in app!',
         statusCode: HttpStatus.FORBIDDEN,
       });
+
+      return;
+    }
 
     if (user.password) {
       user.password = await this.bcryptService.createHash(user.password);
@@ -34,6 +40,8 @@ export class UpdateUserUseCase {
       `User ${id} have been updated`,
     );
 
-    return updatedUser;
+    const userPresenter: UserPresenter = new UserPresenter(updatedUser);
+
+    return userPresenter;
   }
 }

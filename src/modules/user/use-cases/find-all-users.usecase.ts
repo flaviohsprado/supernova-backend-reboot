@@ -1,6 +1,6 @@
 import { ICacheManager } from '../../../interfaces/abstracts/cache.interface';
 import { IUserRepository } from '../../../interfaces/repositories/user.repository';
-import { User } from '../entities/user.entity';
+import { UserPresenter } from '../dto/user.presenter';
 
 export class FindAllUserUseCase {
   constructor(
@@ -8,17 +8,23 @@ export class FindAllUserUseCase {
     private readonly cacheManager: ICacheManager,
   ) {}
 
-  public async execute(): Promise<User[]> {
-    const cachedUsers = await this.cacheManager.getCachedObject<User[]>(
-      'users',
-    );
+  public async execute(): Promise<UserPresenter[]> {
+    const cachedUsers = await this.cacheManager.getCachedObject<
+      UserPresenter[]
+    >('users');
 
     if (cachedUsers) return cachedUsers;
 
     const users = await this.repository.findAll();
 
-    await this.cacheManager.setObjectInCache('users', users);
+    if (!users) return undefined;
 
-    return users;
+    const userPresenter: UserPresenter[] = users.map(
+      (user) => new UserPresenter(user),
+    );
+
+    await this.cacheManager.setObjectInCache('users', userPresenter);
+
+    return userPresenter;
   }
 }

@@ -21,13 +21,17 @@ export class LoginUseCase {
       credentials.email,
       credentials.password,
     );
+
     const accessToken = this.jwtService.createToken({
       id: userValidated.id,
       username: userValidated.username,
       avatar: userValidated.file ? userValidated.file.url : null,
     });
 
-    this.logger.log(`LoginUseCases execute()`, `User have been logged in!`);
+    this.logger.log(
+      `LoginUseCases execute()`,
+      `User ${userValidated.username} logged in!`,
+    );
 
     return new AuthPresenter({ accessToken });
   }

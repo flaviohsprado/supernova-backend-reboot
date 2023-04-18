@@ -1,7 +1,8 @@
+import { HttpStatus } from '@nestjs/common';
 import { ICacheManager } from '../../../interfaces/abstracts/cache.interface';
 import { IExceptionService } from '../../../interfaces/abstracts/exceptions.interface';
 import { IUserRepository } from '../../../interfaces/repositories/user.repository';
-import { User } from '../entities/user.entity';
+import { UserPresenter } from '../dto/user.presenter';
 
 export class FindOneUserUseCase {
   constructor(
@@ -10,20 +11,27 @@ export class FindOneUserUseCase {
     private readonly cacheManager: ICacheManager,
   ) {}
 
-  public async execute(id: string): Promise<User> {
-    const cachedUser = await this.cacheManager.getCachedObject<User>('user');
+  public async execute(id: string): Promise<UserPresenter> {
+    const cachedUser: UserPresenter =
+      await this.cacheManager.getCachedObject<UserPresenter>('user');
 
-    if (cachedUser) return cachedUser;
+    if (cachedUser && cachedUser.id === id) return cachedUser;
 
-    const user: User = await this.repository.findOne(id);
+    const user = await this.repository.findOne(id);
 
-    if (!user)
+    if (!user) {
       this.exceptionService.throwNotFoundException({
         message: 'User not found',
+        statusCode: HttpStatus.NOT_FOUND,
       });
+
+      return;
+    }
+
+    const userPresenter: UserPresenter = new UserPresenter(user);
 
     await this.cacheManager.setObjectInCache('user', user);
 
-    return user;
+    return userPresenter;
   }
 }

@@ -12,6 +12,7 @@ import { JwtTokenService } from '../../services/jwt/jwt.service';
 import { RepositoriesModule } from '../repositories.proxy.module';
 import { UserRepository } from '../user/user.repository';
 import { LoginUseCase } from './use-cases/login.usecase';
+import { RefreshTokenUseCase } from './use-cases/refreshToken.usecase';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { LoginUseCase } from './use-cases/login.usecase';
 })
 export class AuthModule {
   static LOGIN_USECASES_PROXY = 'loginUsecasesProxy';
+  static REFRESH_TOKEN_USECASES_PROXY = 'refreshTokenUsecasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -56,8 +58,36 @@ export class AuthModule {
               ),
             ),
         },
+        {
+          inject: [
+            LoggerService,
+            JwtTokenService,
+            BcryptService,
+            ExceptionsService,
+            UserRepository,
+          ],
+          provide: AuthModule.REFRESH_TOKEN_USECASES_PROXY,
+          useFactory: (
+            logger: LoggerService,
+            jwtService: JwtTokenService,
+            bcryptService: BcryptService,
+            exceptionService: ExceptionsService,
+            userRepository: UserRepository,
+          ) =>
+            new UseCaseProxy(
+              new RefreshTokenUseCase(
+                logger,
+                jwtService,
+                exceptionService,
+                userRepository,
+              ),
+            ),
+        },
       ],
-      exports: [AuthModule.LOGIN_USECASES_PROXY],
+      exports: [
+        AuthModule.LOGIN_USECASES_PROXY,
+        AuthModule.REFRESH_TOKEN_USECASES_PROXY,
+      ],
     };
   }
 }
