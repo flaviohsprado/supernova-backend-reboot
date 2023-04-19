@@ -20,30 +20,24 @@ export class UpdateUserFileUseCase {
     id: string,
     file?: CreateFileDTO,
   ): Promise<UserPresenter> {
-    let fileUploaded: CreateFileDTO = file;
-
     const user = await this.repository.findOne(id);
 
     const userFile = await this.fileRepository.findOne(id, OwnerType.USER);
 
     if (this.environmentConfig.getCloudUpload()) {
-      await this.uploadService.deleteFile([userFile.key]);
-      fileUploaded = await this.uploadService.uploadFile(file);
+      if (userFile) await this.uploadService.deleteFile([userFile.key]);
+      file = await this.uploadService.uploadFile(file);
     }
 
     await this.fileRepository.delete(id, OwnerType.USER);
 
-    user.file = await this.fileRepository.update(
-      fileUploaded,
-      id,
-      OwnerType.USER,
-    );
+    user.file = await this.fileRepository.update(file, id, OwnerType.USER);
 
     const updatedUser = await this.repository.update(id, user);
 
     this.logger.log(
       'UpdateUserFileUseCases execute()',
-      `File ${fileUploaded.originalname} have been updated`,
+      `File ${file.originalname} have been updated`,
     );
 
     const userPresenter: UserPresenter = new UserPresenter(updatedUser);

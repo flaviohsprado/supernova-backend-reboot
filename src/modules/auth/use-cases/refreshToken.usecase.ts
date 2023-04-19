@@ -23,8 +23,6 @@ export class RefreshTokenUseCase {
 
     const accessToken = this.jwtService.createToken({
       id: userValidated.id,
-      username: userValidated.username,
-      avatar: userValidated.file ? userValidated.file.url : null,
     });
 
     this.logger.log(

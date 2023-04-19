@@ -19,6 +19,9 @@ export class CreateUserDTO {
   @IsOptionalString()
   public file?: CreateFileDTO;
 
+  @IsOptionalString()
+  public roleId?: string;
+
   constructor(props: CreateUserDTO) {
     Object.assign(this, props);
     this.id = uuid();
@@ -37,4 +40,7 @@ export class UpdateUserDTO {
 
   @IsOptionalString()
   public file?: CreateFileDTO;
+
+  @IsOptionalString()
+  public roleId?: string;
 }

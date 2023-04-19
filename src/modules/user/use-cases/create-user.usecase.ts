@@ -68,14 +68,12 @@ export class CreateUserUseCase {
     id: string,
     file: CreateFileDTO,
   ): Promise<CreateFileDTO> {
-    let fileUploaded: CreateFileDTO = file;
-
     if (this.environmentConfig.getCloudUpload()) {
-      fileUploaded = await this.uploadService.uploadFile(file);
+      file = await this.uploadService.uploadFile(file);
     }
 
-    await this.fileRepository.create(fileUploaded, id, OwnerType.USER);
+    await this.fileRepository.create(file, id, OwnerType.USER);
 
-    return fileUploaded;
+    return file;
   }
 }

@@ -1,9 +1,10 @@
 import { Body, Controller, HttpCode, Param } from '@nestjs/common';
-import { Inject } from '@nestjs/common/decorators';
+import { Inject, UseInterceptors } from '@nestjs/common/decorators';
 import {
   Req,
   UploadedFile,
 } from '@nestjs/common/decorators/http/route-params.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../../common/decorators/isPublicRoute.decorator';
 import { DeleteApiResponse } from '../../common/decorators/requests/deleteApiResponse.decorator';
@@ -16,7 +17,6 @@ import { IAuthRequest } from '../../interfaces/authRequest.interface';
 import { CreateFileDTO } from '../file/dto/file.dto';
 import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 import { UserPresenter } from './dto/user.presenter';
-import { User } from './entities/user.entity';
 import {
   CreateUserUseCase,
   DeleteUserUseCase,
@@ -62,6 +62,7 @@ export class UserController {
 
   @Public()
   @PostApiResponse(UserPresenter, '', false)
+  @UseInterceptors(FileInterceptor('file'))
   public async create(
     @Body() user: CreateUserDTO,
     @UploadedFile() file: Express.Multer.File,
@@ -80,6 +81,7 @@ export class UserController {
   }
 
   @PutApiResponse(UserPresenter, '/:id/avatar')
+  @UseInterceptors(FileInterceptor('file'))
   public async updateUserFile(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
@@ -90,7 +92,7 @@ export class UserController {
 
   @HttpCode(204)
   @DeleteApiResponse('/:id')
-  public async delete(@Param('id') id: string): Promise<User> {
+  public async delete(@Param('id') id: string): Promise<UserPresenter> {
     return await this.deleteUserUseCase.getInstance().execute(id);
   }
 }

@@ -3,12 +3,12 @@ import { CreateFileDTO } from '../../modules/file/dto/file.dto';
 export class FileUtils {
   static async createFile(file: Express.Multer.File): Promise<CreateFileDTO> {
     if (file) {
-      const { filename, mimetype, encoding, buffer } = await file;
+      const { originalname, mimetype, encoding, buffer } = await file;
 
-      const key = `${Date.now()}-${filename}`;
+      const key = `${Date.now()}-${originalname}`;
 
       const newFile: CreateFileDTO = new CreateFileDTO({
-        originalname: filename,
+        originalname,
         fieldname: 'file',
         mimetype,
         encoding,
